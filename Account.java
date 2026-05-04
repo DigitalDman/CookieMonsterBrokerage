@@ -74,6 +74,7 @@ public class Account { // Open account Class
         formattedDate = formattedDate.replace(":", ""); // Remove all :
         
         idNumber = Integer.parseInt(formattedDate); // Assign our idNumber to the date & time, down to the second
+        totalIdNumbers.add(idNumber);
         
 
     } // Close Constructor
