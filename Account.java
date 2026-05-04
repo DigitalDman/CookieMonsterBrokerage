@@ -33,7 +33,7 @@ public class Account { // Open account Class
         System.out.printf("Please enter the users first name: ");
         firstName = userInput.nextLine(); // Might change to next later on
 
-        System.out.println(""); // Blank println for spaceing
+        System.out.println(""); // Blank println for spacing
         // If changed to next run nextLine to clear scanner
         
         // Ask for last name (Same way)
