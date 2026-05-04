@@ -12,6 +12,8 @@ public class Account { // Open account Class
     HashMap<String, ArrayList<Integer>> bookValues = new HashMap<>(); // Save our bookValues
     HashMap<String, ArrayList<Integer>> stocksOwned = new HashMap<>(); // Save our stocks owned
 
+    static ArrayList<Integer> totalIdNumbers = new ArrayList<>(); // Save the all the ID numbers here
+
     // BLANK CONSTRUCTOR // (Make additional constructors for file reading, just w/ Name & balance input)
     public Account() { // Open Constructor
         /// VARIABLES ///
