@@ -21,7 +21,7 @@ public class Account { // Open account Class
         String firstName = "";
         String lastName = "";
         Scanner userInput = new Scanner(System.in);
-        boolean inputAssured = false; // For assureing input
+        boolean inputAssured = false; // For assuring input
 
         /// Date Time Variables for the IDNumber ///
         LocalDateTime dateTime = LocalDateTime.now(); // Save the current date & time
