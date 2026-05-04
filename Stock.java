@@ -53,4 +53,15 @@ class Stock{//creating stock class
         return false; //if the ticker is NOT in use 
     }//close checkDuplicateTicker 
 
+    public boolean checkStockExists(ArrayList<Stock> stocks, String ticker){//this method checks if a stock exists 
+
+for(int i = 0; i < stocks.size(); i++){//for loop to iterate through arraylist of stock objects to check if a stock exists
+if(stocks.get(i).ticker.equalsIgnoreCase(ticker)){//if the ticker of the stock object matches the inputted ticker the stock exists 
+    return true; //the stock exists 
+}//close if statement 
+}//close for loop 
+return false; //the stock does not exist 
+    }//close checkStockExists 
+
+
 }//close class 
