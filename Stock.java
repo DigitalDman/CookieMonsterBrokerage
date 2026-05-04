@@ -53,16 +53,45 @@ class Stock{//creating stock class
         return false; //if the ticker is NOT in use 
     }//close checkDuplicateTicker 
 
-    public boolean checkStockExists(ArrayList<Stock> stocks, String ticker){//this method checks if a stock exists 
+    public boolean checkStockExists(ArrayList<Stock> stocks, String ticker){//this method checks if a stock exists if the stock exists it will return true and if the stock does NOT exist it will return false
 
         for(int i = 0; i < stocks.size(); i++){//for loop to iterate through arraylist of stock objects to check if a stock exists
             if(stocks.get(i).ticker.equalsIgnoreCase(ticker)){//if the ticker of the stock object matches the inputted ticker the stock exists 
                 return true; //the stock exists 
             }//close if statement 
         }//close for loop 
-        
-    return false; //the stock does not exist 
+        return false; //the stock does not exist 
     }//close checkStockExists 
 
+
+    public Stock addShares(Stock obj, int newShares){ //this method adds to the number of shares owned within a stock
+
+        obj.outstandingShares += newShares;  //the amount of shares is accumulative and therefore increases 
+        return obj; //returning the stock object 
+
+    }//close addShares 
+
+    public Stock removeShares(Stock obj, int removeShares){//this method removes the number of shares owned within a stock 
+
+        obj.outstandingShares -= removeShares; //the amount of shares decreases by the amount of shares removed 
+        return obj;//returning the stock object 
+
+    }//close removeShares 
+
+    public Stock stockSplitTwoForOne(Stock obj){//this method returns a stock after a stock split 2-1, the market price is divided by two, and the outstanding shares is doubled
+
+        obj.marketPrice = obj.marketPrice/2; //the market price of the stock gets divided by two 
+        obj.outstandingShares = obj.outstandingShares*2; //the outstanding shares of the stock is doubled 
+        return obj;//return the stock object 
+
+    }//close stockSplitTwoForOne
+
+    public Stock reverseStockSplitOneForTwo(Stock obj){//this method returns a stock after a reverse stock split 1-2, the market price is doubled, and the oustanding shares is divided by two
+
+        obj.marketPrice = obj.marketPrice*2; //the market price of the stock gets doubled 
+        obj.outstandingShares = obj.outstandingShares/2; //the outstanding shares of the stock gets divided by two
+        return obj; //return the stock object 
+        
+    }//close reverseStockSplitOneForTwo
 
 }//close class 
