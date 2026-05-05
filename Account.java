@@ -1,54 +1,105 @@
 import java.time.LocalDateTime; // Importing Scanner for name & balance inputing
 import java.time.format.DateTimeFormatter; // For date & time
 import java.util.ArrayList; // To format the date & time
-import java.util.HashMap; // A Hashmap to be used for our book value & stocks owned things
+import java.util.HashMap; // A Hashmap to be used for our book value & shares owned things
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import java.util.Scanner; // For out hashmaps
 
 public class Account { // Open account Class
     int idNumber; // Hold our account number
     String name; // Hold our account name
     int balance; // Hold our balance
+    boolean accountMade = false;
 
     HashMap<String, ArrayList<Integer>> bookValues = new HashMap<>(); // Save our bookValues
-    HashMap<String, ArrayList<Integer>> stocksOwned = new HashMap<>(); // Save our stocks owned
+    HashMap<String, ArrayList<Integer>> sharesOwned = new HashMap<>(); // Save our shares owned
+    HashMap<String, Integer> averageCost = new HashMap<>(); // Save our average cost 
 
     static ArrayList<Integer> totalIdNumbers = new ArrayList<>(); // Save the all the ID numbers here
 
     // BLANK CONSTRUCTOR // (Make additional constructors for file reading, just w/ Name & balance input)
     public Account() { // Open Constructor
-        /// VARIABLES ///
+        makeAccount();
+    } // Close Constructor
+
+   public void makeAccount(){
+      /// VARIABLES ///
         int balanceInput = 0;
         String firstName = "";
         String lastName = "";
         Scanner userInput = new Scanner(System.in);
-        boolean inputAssured = false; // For assuring input
+        boolean inputAssured = false; // For assureing input
+        Pattern pattern = Pattern.compile("[a-z]", Pattern.CASE_INSENSITIVE);
 
         /// Date Time Variables for the IDNumber ///
         LocalDateTime dateTime = LocalDateTime.now(); // Save the current date & time
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); // To format the Date & Time for the ID number
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-ss"); // To format the Date & Time for the ID number
         String formattedDate = dateTime.format(dateFormatter); // Save it as Day-Month-Year Hour:Miniute:Second
         ///////////////////
 
         // Ask for 1st name (Future D - Mabye make sure its not a number using Pattern like I did in skills)
-        System.out.printf("Please enter the users first name: ");
-        firstName = userInput.nextLine(); // Might change to next later on
+        while (!inputAssured){
+           System.out.printf("Please enter the users first name: ");
+           firstName = userInput.nextLine(); // Might change to next later on
+           
+           for (int index = 0; index < firstName.length(); index += 1){
+                String temp = "" + firstName.charAt(index);
+                Matcher matcher = pattern.matcher(temp); // Make matcher
+                
+                inputAssured = matcher.find(); // Lets see if we got special characters or numbers
 
-        System.out.println(""); // Blank println for spacing
+                //System.err.println(temp);
+                
+                if (!inputAssured){ // If we find a number or character, break
+                    break;
+                } // Close if
+            } // Close for loop
+
+           if (!inputAssured){
+            System.out.println("Error. Can not have Numbers or Special Characters in a name");
+           } // close if statement
+           
+        } // close while loop
+        inputAssured = false;
+
+
+        System.out.println(""); // Blank println for spaceing
         // If changed to next run nextLine to clear scanner
         
         // Ask for last name (Same way)
-        System.out.printf("Please enter the users last name: ");
-        lastName = userInput.nextLine(); // Might change to next later on
+        while (!inputAssured){
+           System.out.printf("Please enter the users last name: ");
+           lastName = userInput.nextLine(); // Might change to next later on
+           
+           for (int index = 0; index < lastName.length(); index += 1){
+                String temp = "" + lastName.charAt(index);
+                Matcher matcher = pattern.matcher(temp); // Make matcher
+                
+                inputAssured = matcher.find(); // Lets see if we got special characters or numbers
+                
+                if (!inputAssured){ // If we find a number or character, break
+                    break;
+                } // Close if
+            } // Close for loop
+           
+           if (!inputAssured){
+            System.out.println("Error. Can not have Numbers or Special Characters in a name");
+           } // close if statement
+           
+        } // close while loop
+        inputAssured = false;
 
         System.out.println(""); // Blank println for spaceing
 
         // Ask for balance input, make sure its only an int & that is posotive
-        while (inputAssured){
+        while (!inputAssured){
             try{
                 System.out.printf("Please enter the users balance: ");
                 balanceInput = userInput.nextInt(); // Ask for the input, trigger catch if inputs not an int
 
-                if (balanceInput > 0){
+                if (balanceInput < 0){
                     System.out.println(5/0); // Devide by 0 to trigger catch since it needs to be a positive number
                 } // Close if
 
@@ -63,22 +114,25 @@ public class Account { // Open account Class
 
         // Ask if you accept the changes
         // Can call accept changes method to see if you accept them or not, idk
+        if (acceptChanges()){
+            balance = balanceInput; // Save balance
+            name = firstName + " " + lastName; // Save the users name
 
+            // Save the ID Number
+            formattedDate = formattedDate.replace("-", ""); // Remove all -
+            formattedDate = formattedDate.replace(" ", ""); // Remove all spaces
+            formattedDate = formattedDate.replace(":", ""); // Remove all :
+            
+            idNumber = Integer.parseInt(formattedDate); // Assign our idNumber to the date & time, down to the second
+            totalIdNumbers.add(idNumber);
+            accountMade = true;
+        } else {
+            accountMade = false;
+        } // Close the change acception
         
-        balance = balanceInput; // Save balance
-        name = firstName + " " + lastName; // Save the users name
 
-        // Save the ID Number
-        formattedDate = formattedDate.replace("-", ""); // Remove all -
-        formattedDate = formattedDate.replace(" ", ""); // Remove all spaces
-        formattedDate = formattedDate.replace(":", ""); // Remove all :
-        
-        idNumber = Integer.parseInt(formattedDate); // Assign our idNumber to the date & time, down to the second
-        totalIdNumbers.add(idNumber);
-        
-
-    } // Close Constructor
-
+      
+   } // Close make account method
 
     public boolean acceptChanges(){ // Open assure input method
         String input = "";
@@ -104,27 +158,27 @@ public class Account { // Open account Class
     } // Close assureInput method
 
 
-    public void buyStock(String ticker, int cost, int stocksBought){ // Open buyStock method
+    public void buyShare(String ticker, int cost, int sharesBought){ // Open buyShare method
         // To save to HashMap
 
         // This is gonna be a weird one
         ArrayList<Integer> newBookValues = new ArrayList<Integer>( bookValues.get(ticker) ); // Clones the original list if I did this right
-        ArrayList<Integer> newStocksOwned = new ArrayList<Integer>( stocksOwned.get(ticker) ); // Clones the original list if I did this right
+        ArrayList<Integer> newSharesOwned = new ArrayList<Integer>( sharesOwned.get(ticker) ); // Clones the original list if I did this right
         
         newBookValues.add(cost); // Add our cost to the bookValues
-        newStocksOwned.add(stocksBought); // Add our Stocks owned to this list
-        // With the way this is arranged, the Book Value & Stocks owned all belong to the same index in their respective arrays
+        newSharesOwned.add(sharesBought); // Add our Shares owned to this list
+        // With the way this is arranged, the Book Value & Shares owned all belong to the same index in their respective arrays
 
         //*
-        if ( bookValues.containsKey(ticker) ){ // If the stock already exist
+        if ( bookValues.containsKey(ticker) ){ // If the share already exist
             bookValues.replace(ticker, newBookValues); // Save our new book value
-            stocksOwned.replace(ticker, newStocksOwned); // Save our new stocks owned
+            sharesOwned.replace(ticker, newSharesOwned); // Save our new shares owned
         } else {
             bookValues.put(ticker, newBookValues); // Save our new book value
-            stocksOwned.put(ticker, newStocksOwned); // Save our new stocks owned
+            sharesOwned.put(ticker, newSharesOwned); // Save our new shares owned
 
         } // If the ticker isnt already bought, just make a new one
-    } // Close buyStock method
+    } // Close buyShare method
 
     public void deposit(int cash){ // Open Deposit method
         // Check to see if your depositing a negative number or not
@@ -133,7 +187,7 @@ public class Account { // Open account Class
 
         } else {
             if ( acceptChanges() ){
-                balance -= cash;
+                balance += cash;
             } // Close accept changes if
         } // Close else
     } // Close deposit method
@@ -154,4 +208,17 @@ public class Account { // Open account Class
 
     } // Close withdraw method
 
+    public void getAverage(){
+        // Loop through & calculate the average cost
+        for (String key : bookValues.keySet() ){
+         System.out.print("Key: " + key + ", Value: ");
+         System.out.println( bookValues.get(key) );
+        } // Close for-each
+        
+        
+    } // Close getAverage method
+
 } // Close account Class
+
+
+
