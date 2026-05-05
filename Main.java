@@ -114,8 +114,8 @@ System.out.printf("6.\tReturn to Main Menu\n");
         switch(input){
             case 1: // If you select 1 (Add Account Holder)
                 // CALL SELECTION METHOD HERE //
-                
                 System.out.println(""); // For spaceing
+                
                 accountManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
             
