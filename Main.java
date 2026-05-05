@@ -35,8 +35,9 @@ System.out.printf("6.\tQuit\n");
 
         // Switch to select the menues
         switch(input){
-            case 1: // If you select 1
+            case 1: // If you select 1 (Add Account Holder)
                 System.out.println(""); // For spaceing
+                
                 accountManagementSubMenu(); // Call account management submenue
                 mainMenu(); // Recall this submenue if you didnt select to leave it
                 break;
