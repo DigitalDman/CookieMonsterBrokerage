@@ -194,40 +194,44 @@ System.out.printf("6.\tReturn to Main Menu\n");
 
         // Switch to select the menues
         switch(input){
-            case 1: // If you select 1
+            case 1: // If you select 1 (Add New Stock to Available Stocks)
                 // CALL SELECTION METHOD HERE //
-                System.out.println(""); // For spaceing
-                
+                System.out.println(""); // For spacing
+                //should I do error handling in the constructor because this will work just like the add account holder 
                 stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
             
-            case 2: // If you select 2
+            case 2: // If you select 2 (Customer Purchase of Stock)
                 // CALL SELECTION METHOD HERE //
-                System.out.println(""); // For spaceing
+                System.out.println(""); // For spacing
+                //I can add to the outstanding shares of the stock that has been purchased 
                 stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
             
-            case 3: // If you select 3
+            case 3: // If you select 3 (Customer Sale of Stock)
                 // CALL SELECTION METHOD HERE //
-                System.out.println(""); // For spaceing
+                System.out.println(""); // For spacing
+                //I can remove the outstanding shares of the stock that has been sold 
                 stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
             
-            case 4: // If you select 4
+            case 4: // If you select 4 (Stocks Split 2 for 1)
                 // CALL SELECTION METHOD HERE //
-                System.out.println(""); // For spaceing
+                System.out.println(""); // For spacing
+                //I will call stockSplitTwoForOne 
                 stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
             
-            case 5: // If you select 5
+            case 5: // If you select 5 (Reverse Stock Split 1 for 2)
                 // CALL SELECTION METHOD HERE //
-                System.out.println(""); // For spaceing
+                System.out.println(""); // For spacing
+                //I will call reverseStockSplitOneForTwo
                 stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
             
-            case 6: // If you select 6
+            case 6: // If you select 6 (Return to Main Menu)
                 // Just break, it'll leave it
-                System.out.println(""); // For spaceing
+                System.out.println(""); // For spacing
                 break;
             
             default:
