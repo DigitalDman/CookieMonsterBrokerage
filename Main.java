@@ -115,12 +115,12 @@ System.out.printf("6.\tReturn to Main Menu\n");
             case 1: // If you select 1 (Add Account Holder)
                 // CALL SELECTION METHOD HERE //
                 System.out.println(""); // For spaceing
-                Account account = new Account();
-                if(accountMade){
-                accounts.add(account);
-                }else{
-              
-                }
+                Account account = new Account(); //creating a new account 
+                if(accountMade){ //if the user accepts the changes 
+                accounts.add(account);//add the new account to the system wide array list of accounts
+                }else{ //if the user does not accept the changes 
+                //do not add the new account to the system wide array list of accounts 
+                }//close if else statement 
                   
                 accountManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
@@ -197,6 +197,7 @@ System.out.printf("6.\tReturn to Main Menu\n");
             case 1: // If you select 1
                 // CALL SELECTION METHOD HERE //
                 System.out.println(""); // For spaceing
+                
                 stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
             
