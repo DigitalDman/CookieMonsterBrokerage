@@ -1,4 +1,9 @@
 import java.util.ArrayList; //importing arraylists 
+import java.util.regex.Pattern; //importing Pattern class
+import java.util.regex.Matcher; //importing Matcher Class 
+import java.util.Scanner; //importing the Scanner Class
+
+
 class Stock{//creating stock class 
 
     //Instance variables, the attributes of the stock object (class variables)
@@ -6,18 +11,105 @@ class Stock{//creating stock class
     String name; //the name of the stock 
     double marketPrice; //current trading price 
     ArrayList<Integer> owners = new ArrayList<>(); //arraylist that holds the account ID's of the owners of the stock
-    int outstandingShares;//the total number of shares owned in the stock
+    int outstandingShares = 0;//the total number of shares owned in the stock
+    static ArrayList<String> tickersSystemWide = new ArrayList<>(); //arraylist that holds the tickers of all stock objects made 
 
-    Stock(String t, String n, double m, ArrayList<Integer> o, int oShare){ //constructor 
-
-        this.ticker = t; //setting the stock's ticker 
-        this.name = n; //setting the name of the stock 
-        this.marketPrice = m; //setting the market price of the stock 
-        for(int i = 0; i < o.size();i++){
-        this.owners.add(o.get(i)); //setting the number of owners of the stock 
-        }
-       this.outstandingShares = oShare; //setting the number of shares owned in the stock 
+    public Stock(){ //constructor 
+       makeStock(); //calling makeStock() method 
     }//close constructor
+
+    public void makeStock(){//this method is used to assign the attributes of a stock while error handling
+
+        //Variable Declaration and Initialization 
+        String ticker = "";//Variable that will hold ticker name 
+        String name = ""; //Variable that will hold the name of the stock 
+        double marketPrice = 0.0; //Variable that will hold the market price of the stock 
+        Scanner userInput = new Scanner(System.in);//creating scanner object 
+        boolean inputAssured = false;//for assuring the input of the user 
+        boolean stockMade = false;//for applying changes 
+        boolean dupTicker = false;//for checking duplicate tickers 
+        Pattern pattern = Pattern.compile("[a-z]",Pattern.CASE_INSENSITIVE); //what the pattern will look for 
+        
+        //User Input and Program Processing 
+        //This while loop is focused on error handling for the stock's ticker 
+        while(!inputAssured){//open while 
+            
+            System.out.printf("Please enter a stock ticker: ");//prompting user to enter a stock ticker 
+            ticker = userInput.next(); //assigning the variable ticker to the user's input 
+
+            //checking for special characters or numbers 
+            for(int i = 0; i < ticker.length(); i++){//for loop to iterate through ticker 
+            String temp = "" + ticker.charAt(i); //creating temp variable that holds the characters of the ticker 
+            Matcher matcher = pattern.matcher(temp); //makes the matcher object and is going to use temp to search for the pattern  
+            inputAssured = matcher.find();  //setting inputAssured to false or true depending on what the matcher finds 
+            
+            if(!inputAssured){//If a number or special character is found 
+                break; //breaking out of loop 
+            }//close if statement 
+
+            }//close for loop
+
+            if(!inputAssured){//open if the input is not valid 
+                System.out.println("Error. Can not have numbers or special characters in a stock ticker"); //if the user tries to put a number or special character in the stock ticker than an error will occur
+                userInput.nextLine(); //clearing scanner 
+            }//close if statement 
+
+            //checking length of ticker 
+            if(inputAssured){//open if the input is valid to check if the length is valid 
+
+                if(ticker.length() > 3){//if the ticker length is greater than three the ticker is too long 
+                System.out.println("Error. The entered ticker is too long. Must be three letters."); //if the user enters a ticker longer than three letters 
+                userInput.nextLine();//clearing scanner 
+                inputAssured = false; //the input is not assured 
+                }//close nested if 
+
+            }
+            
+            //checking for duplicate ticker 
+            if(inputAssured){//open if the input is valid to check if the ticker will exist 
+                dupTicker = checkDuplicateTicker(tickersSystemWide, ticker); //setting dupTicker to the method that check duplicates (true if duplicate found and false if duplicate is NOT found)
+                if(dupTicker){ //if dupTicker is true there is a duplicate 
+                    System.out.println("Error. The entered ticker is already in use. ");//telling user there is a duplicate 
+                    userInput.nextLine();//clearing scanner 
+                    inputAssured = false; //input is not assured 
+                }else{//if dupTicker is false 
+                tickersSystemWide.add(ticker); //adding the ticker name to an arraylist that holds system wide 
+                this.ticker = ticker.toUpperCase(); //setting ticker of stock object 
+                }//close if statement 
+
+            }//close if statement
+
+        }//close while 
+
+        inputAssured = false; //setting input assured to false 
+        userInput.nextLine(); //clearing scanner 
+
+        //The following code block is focused on setting the stock's name 
+            System.out.printf("Please enter the name of the stock: ");//prompting user to input the name of the ticker 
+            name = userInput.nextLine();//setting name to the user's input 
+            this.name = name;//setting name of stock object 
+
+        while(!inputAssured){//open while 
+
+            try{//opening try catch 
+            System.out.printf("Please enter the starting market price: ");//prompting the user to input the starting market price
+            marketPrice = userInput.nextDouble();//setting market price to the user's input 
+            this.marketPrice = marketPrice; //setting the stock's market price 
+            inputAssured = true;//input is assured 
+            }catch(Exception e){
+                System.out.println("Error. Enter a number."); //telling the user to input a number for the market price 
+                inputAssured = false;//input is not assured 
+                userInput.nextLine(); //clearing scanner 
+            }//close try catch 
+        }//close while 
+
+        if(acceptChanges()){
+            stockMade = true; 
+        }else{
+            stockMade = false; 
+        }
+
+    }//close makeStock method 
 
     public String displayStockInfo(Stock obj){//This method will display ticker, the name of the stock, the market price, and outstanding shares in tabular format 
         return String.format("%-20s %-40s %-20.2f %-20d", obj.ticker, obj.name, obj.marketPrice, obj.outstandingShares) ; //returning the info of the stock as a sting 
@@ -42,10 +134,10 @@ class Stock{//creating stock class
 
     }//close removeOwner method 
 
-    public boolean checkDuplicateTicker(ArrayList<Stock> stocks, String tickerCheck){//this method checks if there is a duplicate ticker, if there is a duplicate ticker the method returns true if there is NOT a duplicate ticker the method returns false 
+    public boolean checkDuplicateTicker(ArrayList<String> stocks, String tickerCheck){//this method checks if there is a duplicate ticker, if there is a duplicate ticker the method returns true if there is NOT a duplicate ticker the method returns false 
 
         for(int i = 0; i < stocks.size(); i++){//for loop to iterate through arraylist of stock objects checking the attribute - ticker to see if the inputted ticker matches a ticker already in use 
-            if(stocks.get(i).ticker.equalsIgnoreCase(tickerCheck)){//if the ticker of a stock object matches the inputted ticker 
+            if(stocks.get(i).equalsIgnoreCase(tickerCheck)){//if the ticker of a stock object matches the inputted ticker 
                 return true; //the ticker is already in use 
             }//close if statement 
         }//close for loop 
@@ -93,5 +185,28 @@ class Stock{//creating stock class
         return obj; //return the stock object 
         
     }//close reverseStockSplitOneForTwo
+
+    public boolean acceptChanges(){ // Open assure input method
+        String input = "";
+        Scanner userInput = new Scanner(System.in);
+
+        System.out.printf("Do you accept these changes (y/n): "); // Ask if you accept these changes
+        input = userInput.next();
+
+        // Should I make it so it automatically converts the input to lower case (So it also accepts Y/N and not just y/n)
+
+        // If/Else chain for the inputs
+        if (input.equals("y")) {
+            System.out.println("Changes Made");
+            return true; // Return true if inputs y
+        } else if (input.equals("n")) {
+            System.out.println("Aborting Changes...");
+            return false; // Return false if inputs n
+        } else{
+            System.out.println("Invalid Input");
+            return acceptChanges(); // Recursion loop if the inputs invalid
+        }
+
+    } // Close assureInput method
 
 }//close class 
