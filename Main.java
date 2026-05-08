@@ -197,7 +197,12 @@ System.out.printf("6.\tReturn to Main Menu\n");
             case 1: // If you select 1 (Add New Stock to Available Stocks)
                 // CALL SELECTION METHOD HERE //
                 System.out.println(""); // For spacing
-                //should I do error handling in the constructor because this will work just like the add account holder 
+                Stock stock = new stock(); //creating stock 
+                if(stockMade){//if the user accepts the changes 
+                  stocks.add(stock); //add the stock to the system wide arraylist of stocks 
+                }else{//if the user does not accept the changes 
+                  //do not add the stock to the system wide arraylist of stocks 
+                }//close else if statement 
                 stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
                 break;
             
