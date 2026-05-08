@@ -13,6 +13,7 @@ public class Account { // Open account Class
     int idNumber; // Hold our account number
     String name; // Hold our account name
     int balance; // Hold our balance
+    boolean accountMade;
 
 
     HashMap<String, ArrayList<Integer>> bookValues = new HashMap<>(); // Save our bookValues
@@ -36,7 +37,6 @@ public class Account { // Open account Class
         String lastName = "";
         Scanner userInput = new Scanner(System.in);
         boolean inputAssured = false; // For assureing input
-        boolean accountMade = false;
         Pattern pattern = Pattern.compile("[^a-z]", Pattern.CASE_INSENSITIVE);
 
 
@@ -253,13 +253,3 @@ public class Account { // Open account Class
 
 
 } // Close account Class
-
-
-
-
-
-
-
-
-
-
