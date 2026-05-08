@@ -13,6 +13,8 @@ class Stock { //creating stock class
 	ArrayList<Integer> owners = new ArrayList<>(); //arraylist that holds the account ID's of the owners of the stock
 	int outstandingShares = 0;//the total number of shares owned in the stock
 	static ArrayList<String> tickersSystemWide = new ArrayList<>(); //arraylist that holds the tickers of all stock objects made
+    boolean stockMade = false;//for applying changes
+
 
 	public Stock() { //constructor
 		makeStock(); //calling makeStock() method
@@ -26,7 +28,6 @@ class Stock { //creating stock class
 		double marketPrice = 0.0; //Variable that will hold the market price of the stock
 		Scanner userInput = new Scanner(System.in);//creating scanner object
 		boolean inputAssured = false;//for assuring the input of the user
-		boolean stockMade = false;//for applying changes
 		boolean dupTicker = false;//for checking duplicate tickers
 		Pattern pattern = Pattern.compile("[a-z]",Pattern.CASE_INSENSITIVE); //what the pattern will look for
 
