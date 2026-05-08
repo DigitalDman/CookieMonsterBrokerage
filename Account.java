@@ -5,24 +5,29 @@ import java.util.HashMap; // A Hashmap to be used for our book value & shares ow
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import java.util.Scanner; // For out hashmaps
+
 
 public class Account { // Open account Class
     int idNumber; // Hold our account number
     String name; // Hold our account name
     int balance; // Hold our balance
-    boolean accountMade = false;
+
 
     HashMap<String, ArrayList<Integer>> bookValues = new HashMap<>(); // Save our bookValues
     HashMap<String, ArrayList<Integer>> sharesOwned = new HashMap<>(); // Save our shares owned
-    HashMap<String, Integer> averageCost = new HashMap<>(); // Save our average cost 
+    HashMap<String, Integer> averageCost = new HashMap<>(); // Save our average cost
+
 
     static ArrayList<Integer> totalIdNumbers = new ArrayList<>(); // Save the all the ID numbers here
+
 
     // BLANK CONSTRUCTOR // (Make additional constructors for file reading, just w/ Name & balance input)
     public Account() { // Open Constructor
         makeAccount();
     } // Close Constructor
+
 
    public void makeAccount(){
       /// VARIABLES ///
@@ -31,13 +36,16 @@ public class Account { // Open account Class
         String lastName = "";
         Scanner userInput = new Scanner(System.in);
         boolean inputAssured = false; // For assureing input
-        Pattern pattern = Pattern.compile("[a-z]", Pattern.CASE_INSENSITIVE);
+        boolean accountMade = false;
+        Pattern pattern = Pattern.compile("[^a-z]", Pattern.CASE_INSENSITIVE);
+
 
         /// Date Time Variables for the IDNumber ///
         LocalDateTime dateTime = LocalDateTime.now(); // Save the current date & time
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-ss"); // To format the Date & Time for the ID number
         String formattedDate = dateTime.format(dateFormatter); // Save it as Day-Month-Year Hour:Miniute:Second
         ///////////////////
+
 
         // Ask for 1st name (Future D - Mabye make sure its not a number using Pattern like I did in skills)
         while (!inputAssured){
@@ -47,15 +55,14 @@ public class Account { // Open account Class
            for (int index = 0; index < firstName.length(); index += 1){
                 String temp = "" + firstName.charAt(index);
                 Matcher matcher = pattern.matcher(temp); // Make matcher
-                
+               
                 inputAssured = matcher.find(); // Lets see if we got special characters or numbers
-
-                //System.err.println(temp);
-                
+               
                 if (!inputAssured){ // If we find a number or character, break
                     break;
                 } // Close if
             } // Close for loop
+
 
            if (!inputAssured){
             System.out.println("Error. Can not have Numbers or Special Characters in a name");
@@ -65,9 +72,11 @@ public class Account { // Open account Class
         inputAssured = false;
 
 
+
+
         System.out.println(""); // Blank println for spaceing
         // If changed to next run nextLine to clear scanner
-        
+       
         // Ask for last name (Same way)
         while (!inputAssured){
            System.out.printf("Please enter the users last name: ");
@@ -76,9 +85,9 @@ public class Account { // Open account Class
            for (int index = 0; index < lastName.length(); index += 1){
                 String temp = "" + lastName.charAt(index);
                 Matcher matcher = pattern.matcher(temp); // Make matcher
-                
+               
                 inputAssured = matcher.find(); // Lets see if we got special characters or numbers
-                
+               
                 if (!inputAssured){ // If we find a number or character, break
                     break;
                 } // Close if
@@ -91,7 +100,9 @@ public class Account { // Open account Class
         } // close while loop
         inputAssured = false;
 
+
         System.out.println(""); // Blank println for spaceing
+
 
         // Ask for balance input, make sure its only an int & that is posotive
         while (!inputAssured){
@@ -99,9 +110,11 @@ public class Account { // Open account Class
                 System.out.printf("Please enter the users balance: ");
                 balanceInput = userInput.nextInt(); // Ask for the input, trigger catch if inputs not an int
 
-                if (balanceInput < 0){
+
+                if (balanceInput > 0){
                     System.out.println(5/0); // Devide by 0 to trigger catch since it needs to be a positive number
                 } // Close if
+
 
                 inputAssured = true; // If everything goes smoothly, input assured is true
             } catch (Exception e){
@@ -110,7 +123,9 @@ public class Account { // Open account Class
             } // Close catch
         } // Close while loop
 
+
         System.out.println(""); // Blank println for spaceing
+
 
         // Ask if you accept the changes
         // Can call accept changes method to see if you accept them or not, idk
@@ -118,30 +133,36 @@ public class Account { // Open account Class
             balance = balanceInput; // Save balance
             name = firstName + " " + lastName; // Save the users name
 
+
             // Save the ID Number
             formattedDate = formattedDate.replace("-", ""); // Remove all -
             formattedDate = formattedDate.replace(" ", ""); // Remove all spaces
             formattedDate = formattedDate.replace(":", ""); // Remove all :
-            
+           
             idNumber = Integer.parseInt(formattedDate); // Assign our idNumber to the date & time, down to the second
             totalIdNumbers.add(idNumber);
             accountMade = true;
         } else {
             accountMade = false;
         } // Close the change acception
-        
+       
 
-      
+
+     
    } // Close make account method
+
 
     public boolean acceptChanges(){ // Open assure input method
         String input = "";
         Scanner userInput = new Scanner(System.in);
 
+
         System.out.printf("Do you accept these changes (y/n): "); // Ask if you accept these changes
         input = userInput.next();
 
+
         // Should I make it so it automatically converts the input to lower case (So it also accepts Y/N and not just y/n)
+
 
         // If/Else chain for the inputs
         if (input.equals("y")) {
@@ -155,19 +176,24 @@ public class Account { // Open account Class
             return acceptChanges(); // Recursion loop if the inputs invalid
         }
 
+
     } // Close assureInput method
+
+
 
 
     public void buyShare(String ticker, int cost, int sharesBought){ // Open buyShare method
         // To save to HashMap
 
+
         // This is gonna be a weird one
         ArrayList<Integer> newBookValues = new ArrayList<Integer>( bookValues.get(ticker) ); // Clones the original list if I did this right
         ArrayList<Integer> newSharesOwned = new ArrayList<Integer>( sharesOwned.get(ticker) ); // Clones the original list if I did this right
-        
+       
         newBookValues.add(cost); // Add our cost to the bookValues
         newSharesOwned.add(sharesBought); // Add our Shares owned to this list
         // With the way this is arranged, the Book Value & Shares owned all belong to the same index in their respective arrays
+
 
         //*
         if ( bookValues.containsKey(ticker) ){ // If the share already exist
@@ -177,13 +203,16 @@ public class Account { // Open account Class
             bookValues.put(ticker, newBookValues); // Save our new book value
             sharesOwned.put(ticker, newSharesOwned); // Save our new shares owned
 
+
         } // If the ticker isnt already bought, just make a new one
     } // Close buyShare method
+
 
     public void deposit(int cash){ // Open Deposit method
         // Check to see if your depositing a negative number or not
         if (cash < 0){
             System.out.println("Error. Can not deposit a negative ammount of money"); // Print Error Message
+
 
         } else {
             if ( acceptChanges() ){
@@ -192,11 +221,13 @@ public class Account { // Open account Class
         } // Close else
     } // Close deposit method
 
+
      public void withdraw(int cash) { // Open withdraw method
-        
+       
         // Check to see if your depositing a negative number or not
         if (cash < 0){
             System.out.println("Error. Can not withdraw a negative ammount of money"); // Print Error Message
+
 
         } else if (balance < cash){
             System.out.println("Error. Can not withdraw more than you have");
@@ -206,7 +237,9 @@ public class Account { // Open account Class
             } // Close accept changes if
         } // Close else
 
+
     } // Close withdraw method
+
 
     public void getAverage(){
         // Loop through & calculate the average cost
@@ -214,11 +247,19 @@ public class Account { // Open account Class
          System.out.print("Key: " + key + ", Value: ");
          System.out.println( bookValues.get(key) );
         } // Close for-each
-        
-        
+       
+       
     } // Close getAverage method
 
+
 } // Close account Class
+
+
+
+
+
+
+
 
 
 
