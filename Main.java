@@ -2,8 +2,8 @@ import java.util.Scanner; // Import scanner for input
 import java.util.ArrayList; // Import arrayList
 
 public class Main{//Creating class
-  ArrayList<Account> accounts = new ArrayList<Account>(); // Account list
-  ArrayList<Stock> stocks = new ArrayList<Stock>(); // Stocks list
+  static ArrayList<Account> accounts = new ArrayList<Account>(); // Account list
+  static ArrayList<Stock> stocks = new ArrayList<Stock>(); // Stocks list
 
 public static void main (String [] args){//main method 
   mainMenu(); // Call our main menu method
