@@ -97,8 +97,13 @@ class Stock { //creating stock class
 				marketPrice = userInput.nextDouble();//setting market price to the user's input
 				this.marketPrice = marketPrice; //setting the stock's market price
 				inputAssured = true;//input is assured
+
+                if(marketPrice < 0){//has entered a negative number 
+                    System.out.print(marketPrice/0);//triggering catch 
+                }//close if statement 
+
 			} catch(Exception e) {
-				System.out.println("Error. Enter a number."); //telling the user to input a number for the market price
+				System.out.println("Error. Enter a number and positive value."); //telling the user to input a number for the market price
 				inputAssured = false;//input is not assured
 				userInput.nextLine(); //clearing scanner
 			}//close try catch
@@ -113,7 +118,7 @@ class Stock { //creating stock class
 	}//close makeStock method
 
 	public String displayStockInfo(Stock obj) { //This method will display ticker, the name of the stock, the market price, and outstanding shares in tabular format
-		return String.format("%-20s %-40s %-20.2f %-20d", obj.ticker, obj.name, obj.marketPrice, obj.outstandingShares) ; //returning the info of the stock as a sting
+		return String.format("%-10s %-20s %-20.2f %-20d \n" , obj.ticker, obj.name, obj.marketPrice, obj.outstandingShares) ; //returning the info of the stock as a sting
 	}//close displayStockInfo
 
 	public Stock addOwner(Stock obj, int newOwner) { //method to add a new owner to the stock object
@@ -156,6 +161,16 @@ class Stock { //creating stock class
 		return false; //the stock does not exist
 	}//close checkStockExists
 
+    public boolean checkOwnerExists(Stock obj, int account){//this method checks if an owner already owns shares in the stock object 
+
+        for(int i = 0; i < obj.owners.size(); i++){//for loop to iterate through owners of the stock object 
+            if(owners.get(i) == account){//if the owners matches the account ID then the owner 
+                return true; //the owner exists 
+            }//close if statement
+        }//close for loop 
+        return false; //the owner does not exist 
+    }//close checkOwnerExists method 
+
 
 	public Stock addShares(Stock obj, int newShares) { //this method adds to the number of shares owned within a stock
 
@@ -187,6 +202,55 @@ class Stock { //creating stock class
 
 	}//close reverseStockSplitOneForTwo
 
+    public void stockChangesWhenPurchasingStock(int shares,int account, ArrayList<Stock> stocks){//this method is to change the stock when the user purchases a stock 
+
+        //Variable Declaration and Initialization 
+        String ticker = "";//this variable is for holding the ticker the user inputs 
+        Scanner userInput = new Scanner(System.in);//creating scanner object 
+        boolean tickerExists = false; //variable to check if the ticker exists and therefore the stock 
+        int locationOfStock = 0; //this variable holds the location of the stock the user is try to access 
+        boolean addOwner = false; //this variable helps to differentiate if an owner should be added or not 
+        
+
+        //User input and Program processing 
+        System.out.printf("Enter the ticker of the stock you wish to purchase: ");//prompting the user to input the ticker for the stock they wish to purchase 
+        ticker = userInput.next(); //assigning ticker to user's input 
+
+        tickerExists = checkDuplicateTicker(tickersSystemWide, ticker);//assigning ticker to true or false
+
+        if(tickerExists){//if the ticker exists 
+        
+        locationOfStock = getStock(stocks, ticker); //finding the position of the stock object and assigning that to the locationOfStock variable 
+
+        addShares(stocks.get(locationOfStock), shares);//this method adds to the number of shares owned within a stock
+
+        addOwner = checkOwnerExists(stocks.get(locationOfStock), account);//this method checks if the account already owns shares in stock 
+      
+        if(!addOwner){//if the account is NOT already an owner 
+            addOwner(stocks.get(locationOfStock),account); //add the account to the owners of the share 
+        }//close if statement 
+
+        }else{//if the ticker does not exist 
+            System.out.print("The stock does not exist.");//telling the user the stock does not exist 
+            return; //returning method 
+        }//close if else statement 
+
+    }//close stockChangesForPurchasingStock method 
+
+    public int getStock(ArrayList<Stock> stocks, String ticker){//this method returns the position of the stock the user is trying to access (an assumption is being made that the stock inputted is valid and actually exists)
+        //Variable Declaration and Initialization 
+        int found = 0; //variable used for holding the location of the stock 
+
+        for(int i = 0; i < stocks.size(); i++){//for loop to iterate through the stock objects and see where the ticker exists 
+            if(stocks.get(i).ticker.equalsIgnoreCase(ticker)){//if the ticker equals the stock object's ticker than you have found where the stock exists 
+                found = i; //return the position 
+            }//close if statement 
+        }//close for loop 
+
+        return found; //returning the stock's position 
+    }//close getStock method 
+
+    
 	public boolean acceptChanges() { // Open assure input method
 		String input = "";
 		Scanner userInput = new Scanner(System.in);
@@ -207,5 +271,7 @@ class Stock { //creating stock class
 		}
 
 	} // Close assureInput method
+
+
 
 }//close class
