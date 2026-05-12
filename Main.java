@@ -4,6 +4,7 @@ import java.util.ArrayList; // Import arrayList
 public class Main{//Creating class
   static ArrayList<Account> accounts = new ArrayList<Account>(); // Account list
   static ArrayList<Stock> stocks = new ArrayList<Stock>(); // Stocks list
+  static Stock checkStock = new Stock();//stock object to check stock objects 
 
 public static void main (String [] args){//main method 
   mainMenu(); // Call our main menu method
