@@ -202,24 +202,14 @@ class Stock { //creating stock class
 
 	}//close reverseStockSplitOneForTwo
 
-    public void stockChangesWhenPurchasingStock(int shares,int account, ArrayList<Stock> stocks){//this method is to change the stock when the user purchases a stock 
+    public void stockChangesWhenPurchasingStock(int shares,int account, String ticker, ArrayList<Stock> stocks){//this method is to change the stock when the user purchases a stock 
 
-        //Variable Declaration and Initialization 
-        String ticker = "";//this variable is for holding the ticker the user inputs 
+        //Variable Declaration and Initialization  
         Scanner userInput = new Scanner(System.in);//creating scanner object 
-        boolean tickerExists = false; //variable to check if the ticker exists and therefore the stock 
         int locationOfStock = 0; //this variable holds the location of the stock the user is try to access 
         boolean addOwner = false; //this variable helps to differentiate if an owner should be added or not 
         
-
         //User input and Program processing 
-        System.out.printf("Enter the ticker of the stock you wish to purchase: ");//prompting the user to input the ticker for the stock they wish to purchase 
-        ticker = userInput.next(); //assigning ticker to user's input 
-
-        tickerExists = checkDuplicateTicker(tickersSystemWide, ticker);//assigning ticker to true or false
-
-        if(tickerExists){//if the ticker exists 
-        
         locationOfStock = getStock(stocks, ticker); //finding the position of the stock object and assigning that to the locationOfStock variable 
 
         addShares(stocks.get(locationOfStock), shares);//this method adds to the number of shares owned within a stock
@@ -230,11 +220,7 @@ class Stock { //creating stock class
             addOwner(stocks.get(locationOfStock),account); //add the account to the owners of the share 
         }//close if statement 
 
-        }else{//if the ticker does not exist 
-            System.out.print("The stock does not exist.");//telling the user the stock does not exist 
-            return; //returning method 
-        }//close if else statement 
-
+      
     }//close stockChangesForPurchasingStock method 
 
     public int getStock(ArrayList<Stock> stocks, String ticker){//this method returns the position of the stock the user is trying to access (an assumption is being made that the stock inputted is valid and actually exists)
