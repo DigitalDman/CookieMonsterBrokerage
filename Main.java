@@ -4,7 +4,6 @@ import java.util.ArrayList; // Import arrayList
 public class Main{//Creating class
   static ArrayList<Account> accounts = new ArrayList<Account>(); // Account list
   static ArrayList<Stock> stocks = new ArrayList<Stock>(); // Stocks list
-  static Stock checkStock = new Stock();//stock object to check stock objects 
 
 public static void main (String [] args){//main method 
   mainMenu(); // Call our main menu method
@@ -305,5 +304,52 @@ System.out.printf("3.\tReturn to Main Menu\n");
 
 
 }//Close generateReportsSubMenu
+
+  
+public static boolean checkAccountID(int iD){ // Check to see if our account exists
+    if (accounts.isEmpty()){
+        System.out.println("No accounts exists yet"); // Incase the
+        return false;
+    } else {
+        return accounts.get(0).checkAccountID(iD);
+    }
+} // Close account checkAccountID method
+
+
+public static Account getAccount(int iD){ // So we can actually get what account we're working with
+    for (int i = 0; i < accounts.size(); i += 1) {
+        if (accounts.get(i).idNumber == iD){
+            return accounts.get(i); // Return the account
+        } // Close if
+    } // Close for loop
+    return accounts.get(0); // Return so it doesnt cause a crash as this is only going to be called if the account exists
+} // Close
+
+
+public static boolean checkDuplicateTicker(ArrayList<String> stocks, String tickerCheck) { //this method checks if there is a duplicate ticker, if there is a duplicate ticker the method returns true if there is NOT a duplicate ticker the method returns false
+
+        for(int i = 0; i < stocks.size(); i++) { //for loop to iterate through arraylist of stock objects checking the attribute - ticker to see if the inputted ticker matches a ticker already in use
+            if(stocks.get(i).equalsIgnoreCase(tickerCheck)) { //if the ticker of a stock object matches the inputted ticker
+                return true; //the ticker is already in use
+            }//close if statement
+        }//close for loop
+
+        return false; //if the ticker is NOT in use
+    }//close checkDuplicateTicker
+
+
+ public static int getStock(ArrayList<Stock> stocks, String ticker){//this method returns the position of the stock the user is trying to access (an assumption is being made that the stock inputted is valid and actually exists)
+        //Variable Declaration and Initialization
+        int found = 0; //variable used for holding the location of the stock
+
+        for(int i = 0; i < stocks.size(); i++){//for loop to iterate through the stock objects and see where the ticker exists
+            if(stocks.get(i).ticker.equalsIgnoreCase(ticker)){//if the ticker equals the stock object's ticker than you have found where the stock exists
+                found = i; //return the position
+            }//close if statement
+        }//close for loop
+
+
+        return found; //returning the stock's position
+    }//close getStock method
 
 } // Close main class
