@@ -18,7 +18,6 @@ public class Account { // Open account Class
     HashMap<String, ArrayList<Integer>> sharesOwned = new HashMap<>(); // Save our shares owned
     HashMap<String, Integer> averageCost = new HashMap<>(); // Save our average cost
 
-
     static ArrayList<Integer> totalIdNumbers = new ArrayList<>(); // Save the all the ID numbers here
 
 
@@ -26,6 +25,7 @@ public class Account { // Open account Class
     public Account() { // Open Constructor
         makeAccount();
     } // Close Constructor
+
 
    public void makeAccount(){
       /// VARIABLES ///
@@ -130,12 +130,12 @@ public class Account { // Open account Class
            
             idNumber = Integer.parseInt(formattedDate); // Assign our idNumber to the date & time, down to the second
             totalIdNumbers.add(idNumber);
+            System.out.printf("Your Account ID is: %d \n\n", idNumber);
             accountMade = true;
         } else {
             accountMade = false;
         } // Close the change acception     
    } // Close make account method
-
 
 
     public boolean acceptChanges(){ // Open assure input method
@@ -160,7 +160,6 @@ public class Account { // Open account Class
     } // Close assureInput method
 
 
-
     public static boolean checkAccountID(int iD){ // Check to see if our account exists
        if ( totalIdNumbers.contains(iD) ){
           return true;
@@ -176,36 +175,33 @@ public class Account { // Open account Class
         //*
         if (balance > cost * sharesBought){ // Only buy the shares if you can afford them
             System.out.printf("Buying %d shares for $%d \n", sharesBought, cost * sharesBought);
+            balance -= cost * sharesBought; // Check our new balance
+            System.out.printf("New Balance: %d \n", balance); // Display our new balance
 
-            if (acceptChanges()){
-                balance -= cost * sharesBought; // Check our new balance
-                System.out.printf("New Balance: %d \n", balance); // Display our new balance
+            if ( bookValues.containsKey(ticker) ){ // If the share already exist
+                // This is gonna be a weird one
+                ArrayList<Integer> newBookValues = new ArrayList<Integer>( bookValues.get(ticker) ); // Clones the original list if I did this right
+                ArrayList<Integer> newSharesOwned = new ArrayList<Integer>( sharesOwned.get(ticker) ); // Clones the original list if I did this right
+            
+                newBookValues.add(cost); // Add our cost to the bookValues
+                newSharesOwned.add(sharesBought); // Add our Shares owned to this list
+                // With the way this is arranged, the Book Value & Shares owned all belong to the same index in their respective arrays
 
-                if ( bookValues.containsKey(ticker) ){ // If the share already exist
-                    // This is gonna be a weird one
-                    ArrayList<Integer> newBookValues = new ArrayList<Integer>( bookValues.get(ticker) ); // Clones the original list if I did this right
-                    ArrayList<Integer> newSharesOwned = new ArrayList<Integer>( sharesOwned.get(ticker) ); // Clones the original list if I did this right
+                bookValues.replace(ticker, newBookValues); // Save our new book value
+                sharesOwned.replace(ticker, newSharesOwned); // Save our new shares owned
+            } else {
+                // This is gonna be a weird one
+                ArrayList<Integer> newBookValues = new ArrayList<Integer>(); // Makes the array list blank instead of a clone
+                ArrayList<Integer> newSharesOwned = new ArrayList<Integer>(); //Makes the array list blank instead of a clone
+            
+                newBookValues.add(cost); // Add our cost to the bookValues
+                newSharesOwned.add(sharesBought); // Add our Shares owned to this list
+                // With the way this is arranged, the Book Value & Shares owned all belong to the same index in their respective arrays
+
+                bookValues.put(ticker, newBookValues); // Save our new book value
+                sharesOwned.put(ticker, newSharesOwned); // Save our new shares owned
+            } // If the ticker isnt already bought, just make a new one
                 
-                    newBookValues.add(cost); // Add our cost to the bookValues
-                    newSharesOwned.add(sharesBought); // Add our Shares owned to this list
-                    // With the way this is arranged, the Book Value & Shares owned all belong to the same index in their respective arrays
-
-                    bookValues.replace(ticker, newBookValues); // Save our new book value
-                    sharesOwned.replace(ticker, newSharesOwned); // Save our new shares owned
-                } else {
-                    // This is gonna be a weird one
-                    ArrayList<Integer> newBookValues = new ArrayList<Integer>(); // Makes the array list blank instead of a clone
-                    ArrayList<Integer> newSharesOwned = new ArrayList<Integer>(); //Makes the array list blank instead of a clone
-                
-                    newBookValues.add(cost); // Add our cost to the bookValues
-                    newSharesOwned.add(sharesBought); // Add our Shares owned to this list
-                    // With the way this is arranged, the Book Value & Shares owned all belong to the same index in their respective arrays
-
-                    bookValues.put(ticker, newBookValues); // Save our new book value
-                    sharesOwned.put(ticker, newSharesOwned); // Save our new shares owned
-                } // If the ticker isnt already bought, just make a new one
-                
-            } // Close accept changes if
         } else {
             System.out.printf("With $%d you can not afford to buy %d shares for $%d \n", balance, sharesBought, cost * sharesBought);
         }
@@ -248,7 +244,7 @@ public class Account { // Open account Class
         // Loop through & calculate the average cost
         for (String key : bookValues.keySet() ){
             index = 0; // Reset index
-            for (int bookValue : bookValues.get(key)){
+            for (double bookValue : bookValues.get(key)){
                 int shares = sharesOwned.get(key).get(index); // Get our shares
 
                 totalSharesBought += shares; // Keep track of the total shares we bought
@@ -264,13 +260,14 @@ public class Account { // Open account Class
        
     } // Close getAverage method
 
+
     public double getAverage(String key){
         int totalSharesBought = 0;
         double average = 0;
         int index = 0;
 
         // Loop through & calculate the average cost
-        for (int bookValue : bookValues.get(key)){
+        for (double bookValue : bookValues.get(key)){
             int shares = sharesOwned.get(key).get(index); // Get our shares
 
             totalSharesBought += shares; // Keep track of the total shares we bought
@@ -284,6 +281,7 @@ public class Account { // Open account Class
         return average;
        
     } // Close getAverage method
+
 
     public void display(){ // Open display method
         System.out.println("\n \n"); // Create 3 new lines
