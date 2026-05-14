@@ -10,12 +10,13 @@ import java.util.regex.Pattern; // For out hashmaps
 public class Account { // Open account Class
     int idNumber; // Hold our account number
     String name; // Hold our account name
-    int balance; // Hold our balance
+    double balance; // Hold our balance
     boolean accountMade;
 
 
-    HashMap<String, ArrayList<Integer>> bookValues = new HashMap<>(); // Save our bookValues
+    HashMap<String, ArrayList<Double>> bookValues = new HashMap<>(); // Save our bookValues
     HashMap<String, ArrayList<Integer>> sharesOwned = new HashMap<>(); // Save our shares owned
+    HashMap<String, Integer> totalShares = new HashMap<>(); // Save the total Shares we own
     HashMap<String, Integer> averageCost = new HashMap<>(); // Save our average cost
 
     static ArrayList<Integer> totalIdNumbers = new ArrayList<>(); // Save the all the ID numbers here
@@ -169,18 +170,18 @@ public class Account { // Open account Class
     } // Close account checkAccountID method
 
 
-    public void buyShare(String ticker, int cost, int sharesBought){ // Open buyShare method
+    public void buyShare(String ticker, double cost, int sharesBought){ // Open buyShare method
         // To save to HashMap
 
         //*
         if (balance > cost * sharesBought){ // Only buy the shares if you can afford them
-            System.out.printf("Buying %d shares for $%d \n", sharesBought, cost * sharesBought);
+            System.out.printf("Buying %d shares for $%.2f \n", sharesBought, cost * sharesBought);
             balance -= cost * sharesBought; // Check our new balance
-            System.out.printf("New Balance: %d \n", balance); // Display our new balance
+            System.out.printf("New Balance: %.2f \n", balance); // Display our new balance
 
             if ( bookValues.containsKey(ticker) ){ // If the share already exist
                 // This is gonna be a weird one
-                ArrayList<Integer> newBookValues = new ArrayList<Integer>( bookValues.get(ticker) ); // Clones the original list if I did this right
+                ArrayList<Double> newBookValues = new ArrayList<Double>( bookValues.get(ticker) ); // Clones the original list if I did this right
                 ArrayList<Integer> newSharesOwned = new ArrayList<Integer>( sharesOwned.get(ticker) ); // Clones the original list if I did this right
             
                 newBookValues.add(cost); // Add our cost to the bookValues
@@ -191,7 +192,7 @@ public class Account { // Open account Class
                 sharesOwned.replace(ticker, newSharesOwned); // Save our new shares owned
             } else {
                 // This is gonna be a weird one
-                ArrayList<Integer> newBookValues = new ArrayList<Integer>(); // Makes the array list blank instead of a clone
+                ArrayList<Double> newBookValues = new ArrayList<Double>(); // Makes the array list blank instead of a clone
                 ArrayList<Integer> newSharesOwned = new ArrayList<Integer>(); //Makes the array list blank instead of a clone
             
                 newBookValues.add(cost); // Add our cost to the bookValues
@@ -201,11 +202,38 @@ public class Account { // Open account Class
                 bookValues.put(ticker, newBookValues); // Save our new book value
                 sharesOwned.put(ticker, newSharesOwned); // Save our new shares owned
             } // If the ticker isnt already bought, just make a new one
-                
+
         } else {
             System.out.printf("With $%d you can not afford to buy %d shares for $%d \n", balance, sharesBought, cost * sharesBought);
         }
         
+    } // Close buyShare method
+
+
+    public void sellShares(String ticker, double cost, int sharesSold){ // Open buyShare method
+
+        System.out.printf("Selling %d shares for $%.2f \n", sharesSold, cost * sharesSold);
+        balance -= cost * sharesSold; // Check our new balance
+        System.out.printf("New Balance: %.2f \n", balance); // Display our new balance
+
+        for (int i = sharesSold; i > 0; i -= 1){
+            if (sharesOwned.get(ticker).get(0) - 1 >= 0){
+                sharesOwned.get(ticker).set(0, sharesOwned.get(ticker).get(0) - 1);
+                // Save our new Share owned
+                // sharesOwned.get(ticker) - gets our ticker
+                //.set(index, ) - changes the value at arrayList.index
+                // sharesOwned.get(ticker).get(index) - 1, tells it what to change the value to
+
+                //System.out.println(sharesOwned.get(ticker));
+            } else {
+                sharesOwned.get(ticker).remove(0); // Remove whatevers at index 0 when you run out of shares
+                bookValues.get(ticker).remove(0); // Remove whatevers at index 0 when you run out of shares
+            }
+            //System.out.println(i);
+            //System.out.printf("Index: %d", index);
+        } // Close for loop
+        
+        /////// REMOVE SHARES OWNED. JUST DO INDEX 0 FOR THIS SHIT ///////
     } // Close buyShare method
 
 
@@ -221,7 +249,7 @@ public class Account { // Open account Class
     } // Close deposit method
 
 
-     public void withdraw(int cash) { // Open withdraw method
+    public void withdraw(int cash) { // Open withdraw method
        
         // Check to see if your depositing a negative number or not
         if (cash < 0){
@@ -287,6 +315,7 @@ public class Account { // Open account Class
         System.out.println("\n \n"); // Create 3 new lines
 
         System.out.printf("Account ID: %d \n", idNumber); // Display the accounts ID
+        System.out.printf("Account Balance: %.2f \n", balance);
         // Print out our headder
         System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s  \n", "Ticker", "Number of Shares", "Average Cost", "Market Price", "Book Value", "Market Value");
         
