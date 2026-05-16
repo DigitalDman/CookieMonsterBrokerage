@@ -9,8 +9,6 @@ public class Main { //Creating class
 	static ArrayList<Stock> stocks = new ArrayList<Stock>(); // Stocks list
 
 
-
-
 	public static void main (String [] args) { //main method
 		mainMenu(); // Call our main menu method
 	}//close main method
@@ -102,20 +100,14 @@ public class Main { //Creating class
 	} // Close main menu method
 
 
-
-
 	public static void accountManagementSubMenu() { // Method for our account mangement sub menue
 		//Variable Declaration and Intialization
 		int input = 0; //variable to hold user's input
 		boolean inputAssured = false; // Assuring input
 		Scanner userInput = new Scanner(System.in); // Creating the canner for user Input
 
-
-
-
-
-
 		// Menu output
+		System.out.println(""); // For spaceing
 		System.out.printf("Customer Account Management Submenu:\n"); //welcoming the user to the submenu
 		System.out.printf("1.\tAdd Account Holder\n");
 		System.out.printf("2.\tRemove Account Holder\n");
@@ -139,8 +131,7 @@ public class Main { //Creating class
 		} // Close while loop
 
 
-
-
+		//System.out.println(""); // For spaceing
 		// Switch to select the menues
 		switch(input) {
 		case 1: // If you select 1 (Add Account Holder)
@@ -149,9 +140,9 @@ public class Main { //Creating class
 			Account account = new Account(); //creating a new account
 			if(account.accountMade) { //if the user accepts the changes
 				accounts.add(account);//add the new account to the system wide array list of accounts
-			} else { //if the user does not accept the changes
-				//do not add the new account to the system wide array list of accounts
-			}//close if else statement
+			} //if the user does not accept the changes
+			//do not add the new account to the system wide array list of accounts
+			//close if else statement
 
 
 			accountManagementSubMenu(); // Recall this submenue if you didnt select to leave it
@@ -161,6 +152,9 @@ public class Main { //Creating class
 		case 2: // If you select 2
 			// CALL SELECTION METHOD HERE //
 			System.out.println(""); // For spaceing
+
+			removeAccount(); // This is our remove account call
+
 			accountManagementSubMenu(); // Recall this submenue if you didnt select to leave it
 			break;
 
@@ -168,6 +162,7 @@ public class Main { //Creating class
 		case 3: // If you select 3
 			// CALL SELECTION METHOD HERE //
 			System.out.println(""); // For spaceing
+			withdrawOrDepositACcount("deposit");
 			accountManagementSubMenu(); // Recall this submenue if you didnt select to leave it
 			break;
 
@@ -175,6 +170,7 @@ public class Main { //Creating class
 		case 4: // If you select 4
 			// CALL SELECTION METHOD HERE //
 			System.out.println(""); // For spaceing
+			withdrawOrDepositACcount("withdraw");
 			accountManagementSubMenu(); // Recall this submenue if you didnt select to leave it
 			break;
 
@@ -182,6 +178,7 @@ public class Main { //Creating class
 		case 5: // If you select 5
 			// CALL SELECTION METHOD HERE //
 			System.out.println(""); // For spaceing
+			displayAccount(); // Call display account method
 			accountManagementSubMenu(); // Recall this submenue if you didnt select to leave it
 			break;
 
@@ -196,8 +193,6 @@ public class Main { //Creating class
 			System.out.printf("Selection made is out of range.");
 			System.out.println(""); // For spaceing
 			accountManagementSubMenu();
-
-
 
 
 		} // close Switch
@@ -235,8 +230,6 @@ public class Main { //Creating class
 				System.out.println("Error. Please select a number from 1-6");
 			} // Close catch
 		} // Close while loop
-
-
 
 
 		// Switch to select the menues
@@ -277,9 +270,8 @@ public class Main { //Creating class
 
 
 			//
-
-
 			//I can remove the outstanding shares of the stock that has been sold
+			customerSaleOfStock();
 			stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
 			break;
 
@@ -310,15 +302,10 @@ public class Main { //Creating class
 			System.out.printf("Selection made is out of range.");
 			System.out.println(""); // For spaceing
 			stockManagementSubMenu();
-
-
-
-
 		} // close Switch
 
 
 	} // Close stockManagementSubMenu method
-
 
 
 
@@ -328,23 +315,11 @@ public class Main { //Creating class
 		boolean inputAssured = false; // Assuring input
 		Scanner userInput = new Scanner(System.in); // Creating the canner for user Input
 
-
-
-
-
-
-
-
-
-
 		//Menu output
 		System.out.printf("Generate Reports Submenu:\n"); //welcoming the user to the submenu
 		System.out.printf("1.\tView All Current Holders of a Particular Stock\n");
 		System.out.printf("2.\tGenerate All Positions For All Accounts\n");
 		System.out.printf("3.\tReturn to Main Menu\n");
-
-
-
 
 		// Using a try catch to assure input
 		while (inputAssured == false) {
@@ -356,8 +331,6 @@ public class Main { //Creating class
 				System.out.println("Error. Please select a number from 1-3");
 			} // Close catch
 		} // Close while loop
-
-
 
 
 		// Switch to select the menues
@@ -387,13 +360,8 @@ public class Main { //Creating class
 			System.out.println(""); // For spaceing
 			generateReportsSubMenu();
 
-
-
-
 		} // close Switch
 	}//Close generateReportsSubMenu
-
-
 
 
 	public static void customerPurchaseOfStock() {
@@ -431,7 +399,6 @@ public class Main { //Creating class
 
 
 
-
 			if (checkDuplicateTicker(stocks, providedTicker)) { // Checking to see if the stock exists
 				while (!inputAssured) {
 					try {
@@ -443,9 +410,6 @@ public class Main { //Creating class
 							System.out.println("Invalid Input. Returning to submenu");
 							return;
 						} // Close if
-
-
-
 
 						inputAssured = true; // Assure the input
 					} catch (Exception e) {
@@ -483,10 +447,6 @@ public class Main { //Creating class
 	} // close customerPurchaseOfStock method
 
 
-
-
-
-
 	public static boolean checkAccountID(int iD) { // Check to see if our account exists
 		if (accounts.isEmpty()) {
 			System.out.println("No accounts exists yet"); // Incase the
@@ -497,8 +457,6 @@ public class Main { //Creating class
 	} // Close account checkAccountID method
 
 
-
-
 	public static Account getAccount(int iD) { // So we can actually get what account we're working with
 		for (int i = 0; i < accounts.size(); i += 1) {
 			if (accounts.get(i).idNumber == iD) {
@@ -507,9 +465,7 @@ public class Main { //Creating class
 		} // Close for loop
 		return accounts.get(0); // Return so it doesnt cause a crash as this is only going to be called if the account exists
 	} // Close
-
-
-
+	
 
 	public static boolean checkDuplicateTicker(ArrayList<Stock> stocks, String tickerCheck) { //this method checks if there is a duplicate ticker, if there is a duplicate ticker the method returns true if there is NOT a duplicate ticker the method returns false
 
@@ -520,21 +476,13 @@ public class Main { //Creating class
 			}//close if statement
 		}//close for loop
 
-
-
-
 		return false; //if the ticker is NOT in use
 	}//close checkDuplicateTicker
-
-
 
 
 	public static int getStock(ArrayList<Stock> stocks, String ticker) { //this method returns the position of the stock the user is trying to access (an assumption is being made that the stock inputted is valid and actually exists)
 		//Variable Declaration and Initialization
 		int found = 0; //variable used for holding the location of the stock
-
-
-
 
 		for(int i = 0; i < stocks.size(); i++) { //for loop to iterate through the stock objects and see where the ticker exists
 			if(stocks.get(i).ticker.equalsIgnoreCase(ticker)) { //if the ticker equals the stock object's ticker than you have found where the stock exists
@@ -564,6 +512,7 @@ public class Main { //Creating class
 				inputAssured = true; // Assure the input
 			} catch (Exception e) {
 				System.out.println("Error. Please enter a valid number");
+				userInput.nextLine(); // Clear scanner
 			} // Close Try...Catch
 		} // Close while loop
 		inputAssured = false;
@@ -577,7 +526,9 @@ public class Main { //Creating class
 			providedTicker = userInput.next();
 			userInput.nextLine(); // Clear scanner
 
+
 			if (checkDuplicateTicker(stocks, providedTicker)) { // Checking to see if the stock exists
+
 				if (accountUsed.bookValues.containsKey(providedTicker)) {
 
 
@@ -586,7 +537,8 @@ public class Main { //Creating class
 							System.out.print("How many stocks do you wish to sell: ");
 							sharesSold = userInput.nextInt();
 
-							if(sharesSold <= 0){
+
+							if (sharesSold <= 0) {
 								System.out.println("Invalid Input. Returning to calling menu"); // Divide by 0 to trigger catch
 								return; // Return to calling menu
 							} // Close if
@@ -599,20 +551,22 @@ public class Main { //Creating class
 							inputAssured = true; // Assure the input
 						} catch (Exception e) {
 							System.out.println("Please enter a valid number");
+							userInput.nextLine(); // Clear scanner
 						} // Close Try...Catch
-
 					} // Close while loop
 					inputAssured = false;
 
 
 					if (!accountUsed.bookValues.containsKey(providedTicker)) {
-						removeOwner(stocks.get(getStock(stocks, providedTicker)), providedID);
+						removeOwner(stocks.get(getStock(stocks, providedTicker)), sharesSold);
 						//stockChangesWhenSellingStocks(sharesSold,providedTicker, stocks);
+
 						// Remove account holder
 					} // If to remove the account
 
+
 				} else { // If the account does not own any shares in that stock
-					System.out.println("You do not own the stock. ");
+					System.out.println("You do not own the stock.");
 				}
 			} else {
 				System.out.println("The provided Stock does not exist");
@@ -622,6 +576,7 @@ public class Main { //Creating class
 			System.out.println("The provided account ID does not exist");
 			return;
 		}
+
 	} // Close sale of Stock
 
 
@@ -634,18 +589,157 @@ public class Main { //Creating class
 		}//close for loop
 
 		return obj; //will return the stock object with the desired owner removed
+
+
 	}//close removeOwner method
-	
 
-	public void stockChangesWhenSellingStock(int shares, String ticker, ArrayList<Stock> stocks) { //this method is to change the stock when the user sells a stock (selling some shares NOT all of their shares)
 
+	public static void stockChangesWhenSellingStock(int shares, String ticker, ArrayList<Stock> stocks) { //this method is to change the stock when the user sells a stock (selling some shares NOT all of their shares)
 		//Variable Declaration and Initialization
 		Scanner userInput = new Scanner(System.in);//creating scanner object
 		int locationOfStock = 0; //this variable holds the location of the stock the user is try to access
 
+
 		//User input and Program processing
 		locationOfStock = getStock(stocks, ticker); //finding the position of the stock object and assigning that to the locationOfStock variable
-
 		removeShares(stocks.get(locationOfStock), shares);//this method removes the number of shares owned within a stock (being sold)
-	}
+
+	} // Close stockChangesWhenSellingStock method
+	
+
+	public static Stock removeShares(Stock obj, int removeShares) { //this method removes the number of shares owned within a stock
+		obj.outstandingShares -= removeShares; //the amount of shares decreases by the amount of shares removed
+		return obj;//returning the stock object
+	}//close removeShares
+
+
+	public static void removeAccount(){
+		Scanner userInput = new Scanner(System.in);
+		int accountIndex = 0;
+		int providedID = 0;
+		boolean inputAssured = false;
+
+		
+		while (!inputAssured) {
+			try {
+				System.out.print("Please enter a valid account ID: ");
+				providedID = userInput.nextInt();
+				inputAssured = true; // Assure the input
+			} catch (Exception e) {
+				System.out.println("Error. Please enter a valid number");
+				userInput.nextLine(); // Clear scanner
+			} // Close Try...Catch
+		} // Close while loop
+		inputAssured = false;
+
+		if (checkAccountID(providedID)){
+			Account providedAccount = getAccount(providedID);
+			accountIndex = accounts.indexOf(providedAccount); 
+			
+			if (providedAccount.acceptChanges()){
+				accounts.remove(accountIndex); //Remove the account
+			} // Only move the account if you accept the changes
+
+		} else {
+			System.out.println("The provided account does not exist. Aborting changes...");
+			return; // Return if hte ID doesnt exist
+		} // Close else
+
+
+	} // Close remove account method
+
+	public static void displayAccount(){
+	Scanner userInput = new Scanner(System.in);
+	int providedID = 0;
+	boolean inputAssured = false;
+
+	
+	while (!inputAssured) {
+		try {
+			System.out.print("Please enter a valid account ID: ");
+			providedID = userInput.nextInt();
+			inputAssured = true; // Assure the input
+		} catch (Exception e) {
+			System.out.println("Error. Please enter a valid number");
+			userInput.nextLine(); // Clear scanner
+		} // Close Try...Catch
+	} // Close while loop
+	inputAssured = false;
+
+	if (checkAccountID(providedID)){
+		Account providedAccount = getAccount(providedID);
+		providedAccount.display();
+
+	} else {
+		System.out.println("The provided account does not exist. Aborting changes...");
+		return; // Return if hte ID doesnt exist
+	} // Close else
+
+
+} // Close remove account method
+
+
+	public static void withdrawOrDepositACcount(String choice){
+		Scanner userInput = new Scanner(System.in);
+		int providedID = 0;
+		boolean inputAssured = false;
+		int cashAmmount = 0;
+
+		
+		while (!inputAssured) {
+			try {
+				System.out.print("Please enter a valid account ID: ");
+				providedID = userInput.nextInt();
+				inputAssured = true; // Assure the input
+			} catch (Exception e) {
+				System.out.println("Error. Please enter a valid number");
+				userInput.nextLine(); // Clear scanner
+			} // Close Try...Catch
+		} // Close while loop
+		inputAssured = false;
+
+		if (checkAccountID(providedID)){
+			Account providedAccount = getAccount(providedID);
+			
+			if (choice.equals("withdraw")){ // Withdraw
+
+				while (!inputAssured) {
+					try {
+						System.out.print("How much cash would you like to withdraw: ");
+						cashAmmount = userInput.nextInt();
+						inputAssured = true; // Assure the input
+					} catch (Exception e) {
+						System.out.println("Error. Please enter a valid number");
+						userInput.nextLine(); // Clear scanner
+					} // Close Try...Catch
+				} // Close while loop
+				inputAssured = false;
+
+				providedAccount.withdraw(cashAmmount);
+
+			} else if (choice.equals("deposit")){
+
+				while (!inputAssured) {
+					try {
+						System.out.print("How much cash would you like to deposit: ");
+						cashAmmount = userInput.nextInt();
+						inputAssured = true; // Assure the input
+					} catch (Exception e) {
+						System.out.println("Error. Please enter a valid number");
+						userInput.nextLine(); // Clear scanner
+					} // Close Try...Catch
+				} // Close while loop
+				inputAssured = false;
+
+				providedAccount.deposit(cashAmmount);
+
+			} // Deposit
+
+		} else {
+			System.out.println("The provided account does not exist. Aborting changes...");
+			return; // Return if hte ID doesnt exist
+		} // Close else
+
+
+	} // Close remove account method
 } // Close main class
