@@ -259,19 +259,7 @@ public class Main { //Creating class
 		case 3: // If you select 3 (Customer Sale of Stock)
 			// CALL SELECTION METHOD HERE //
 			System.out.println(""); // For spacing
-			//check account ID
-			//display
-			//ask what stock they want to buy using ticker
-			//make sure they own that stock
-			//ask how many shares they want to sell
-			//(error handling) no negative number no 0 (if zero is inputted return to calling menu) and no number greater than the shares they already have (if this is inputted allow them to re enter)
-			//remove outstanding shares from stock, if user inputs the amount of shares they own then remove them as an owner as well
-			//book value and market value must be be for portfolio must be re calculated
-
-
-			//
-			//I can remove the outstanding shares of the stock that has been sold
-			customerSaleOfStock();
+			customerSaleOfStock(); //calling method 
 			stockManagementSubMenu(); // Recall this submenue if you didnt select to leave it
 			break;
 
@@ -324,7 +312,7 @@ public class Main { //Creating class
 		// Using a try catch to assure input
 		while (inputAssured == false) {
 			try {
-				System.out.print("Selection(1-6): "); // Set up line for selection input
+				System.out.print("Selection(1-3): "); // Set up line for selection input
 				input = userInput.nextInt(); // Asking for int
 				inputAssured = true; // Say the userInput was assured
 			} catch (Exception e) {
@@ -335,16 +323,18 @@ public class Main { //Creating class
 
 		// Switch to select the menues
 		switch(input) {
-		case 1: // If you select 1
+		case 1: // If you select 1 (View All Current Holders of a Particular Stock)
 			// CALL SELECTION METHOD HERE //
 			System.out.println(""); // For spaceing
+            displayCurrentHoldersOfParticularStock();//calling method for diplay
 			generateReportsSubMenu(); // Recall this submenue if you didnt select to leave it
 			break;
 
 
 		case 2: // If you select 2
-			// CALL SELECTION METHOD HERE //
+			// CALL SELECTION METHOD HERE // (Generate All Positions For All Particular Stocks)
 			System.out.println(""); // For spaceing
+			generateAllPositionsForAllAccounts();//calling method for display
 			generateReportsSubMenu(); // Recall this submenue if you didnt select to leave it
 			break;
 
@@ -741,5 +731,50 @@ public class Main { //Creating class
 		} // Close else
 
 
+
 	} // Close remove account method
+
+    public static void displayCurrentHoldersOfParticularStock(){//this method will be used for the generate reports submenu and will display all current holders of a particular stock 
+
+        //Variable Declaration and Initialization 
+        Scanner userInput = new Scanner(System.in);//creating scanner object 
+        String stockTicker = ""; //this variable will be used to hold the stock ticker the user wishes to view the owner's of 
+        int locationOfStock = 0;//variable that will hold location of stock 
+        int totalShares = 0; //this variable will hold the amount of shares an account holds in a given stock 
+        
+       
+        System.out.printf("Please enter a stock ticker: ");//prompting user to enter a stock ticker 
+        stockTicker = userInput.next();//assigning stockTicker to user input 
+      
+
+        if(checkDuplicateTicker(stocks, stockTicker)){ //if there is a duplicate that means the stock does exist
+            
+            locationOfStock = getStock(stocks,stockTicker); //finding where the stock exists 
+            System.out.printf("%-10s %-20s %-20s %-20s\n", "Client ID", "Client Name", "Number of Shares", "Client's Average Cost");//formatting 
+            for(int i = 0; i < stocks.get(locationOfStock).owners.size(); i++){//for loop to iterate through the owners of the stock object 
+                
+                for(int j = 0; j < accounts.size(); j++){//inner for loop to iterate through all the accounts in the accounts Arraylist until the account id matches the owners of the stock's id 
+                    if(accounts.get(j).idNumber == stocks.get(locationOfStock).owners.get(i)){//if the account id matches the owner of the stock's id 
+
+                        for(int k = 0; k < accounts.get(j).sharesOwned.get(stockTicker).size(); k++){//for loop to iterate through the shares of the stock bought by the account 
+                        totalShares += accounts.get(j).sharesOwned.get(stockTicker).get(k);//adding all the shares bought by the account 
+                        }//close for loop 
+                        System.out.printf("%-10d %-20s %-20d %-20.2f\n", accounts.get(j).idNumber, accounts.get(j).name, totalShares, accounts.get(j).getAverage(stockTicker));//displaying the account id, the name of the account, the amount of shares the account holds in the stock and the average cost of the account 
+                    }
+                    totalShares = 0; //total shares get set back to zero 
+                }
+
+            }
+        }else{//the stock does not exist 
+            System.out.println("The inputted stock does not exist.");
+            return; 
+        }
+    }//close displayCurrentHoldersOfParticularStock method 
+
+	public static void generateAllPositionsForAllAccounts(){//this method will generate all positions for all account holders and will output a tabular report including the name of the account holder, the book value and the market value. 
+		for(int i = 0; i < accounts.size(); i++){//this for loop iterates through the accounts and displays the info 
+			accounts.get(i).display();//calling display method in account class 
+			System.out.println(); //formatting 
+		}//close for loop 
+	}//close generateAllPositionsForAllAccounts method 
 } // Close main class
